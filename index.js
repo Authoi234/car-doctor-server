@@ -20,7 +20,9 @@ const client = new MongoClient(uri, { serverApi: { version: ServerApiVersion.v1,
 async function run() {
   try {
     const serviceCollection = client.db('carDoctor').collection('service');
+    const orderCollection = client.db('carDoctor').collection('orders');
 
+    // services api
     app.get('/services', async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
@@ -35,6 +37,14 @@ async function run() {
       const service = await serviceCollection.findOne(query);
       res.send(service);
     })
+
+    // orders api
+    app.post('/orders', async(req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
+      res.send(result);
+    })
+
   } finally {
 
   }
